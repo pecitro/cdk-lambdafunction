@@ -1,0 +1,11 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"scripts": {},
+	"devDependencies": {
+		"npm-check-updates": "^17.1.1"
+	},
+	"dependencies": {
+		"@types/aws-lambda": "^8.10.145"
+	}
+}
