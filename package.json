@@ -1,5 +1,9 @@
 {
   "workspaces": ["backend", "frontend", "cdk"],
+  "scripts": {
+    "cdk_diff": "npm -w frontend run build && npx -w cdk cdk diff",
+    "cdk_deploy": "npm -w frontend run build && npx -w cdk cdk deploy"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "@eslint/js": "9.10.0",
