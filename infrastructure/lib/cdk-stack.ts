@@ -4,13 +4,19 @@ import * as lambda_nodejs from "aws-cdk-lib/aws-lambda-nodejs";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import type { Construct } from "constructs";
 
+interface MyStackProps extends cdk.StackProps {
+  envname: string;
+}
+
 export class CdkStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: MyStackProps) {
     super(scope, id, props);
+
+    const envname = props.envname;
 
     // Site S3 Bucket作成
     const siteBucket = new s3.Bucket(this, "staticSitesBucket", {
-      bucketName: `hoge-${this.account}-${this.region}`,
+      bucketName: `${envname}-${this.account}-${this.region}`,
       publicReadAccess: false,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -20,7 +26,7 @@ export class CdkStack extends cdk.Stack {
     // Site S3 ファイルアップロード（静的アセット）
     new cdk.aws_s3_deployment.BucketDeployment(
       this,
-      "staticSitesBucketUpload",
+      `staticSitesBucketUpload-${envname}`,
       {
         sources: [cdk.aws_s3_deployment.Source.asset("../frontend/dist")],
         destinationBucket: siteBucket,
@@ -28,19 +34,16 @@ export class CdkStack extends cdk.Stack {
     );
 
     // API Lambda(VPC)
-    const apiLambda = new lambda_nodejs.NodejsFunction(
-      this,
-      "apiServerLambda",
-      {
-        entry: "../backend/src/index.ts",
-        handler: "handler",
-        runtime: lambda.Runtime.NODEJS_20_X,
-        memorySize: 256,
-        bundling: {
-          forceDockerBundling: true,
-        },
+    const apiLambda = new lambda_nodejs.NodejsFunction(this, "lambda", {
+      functionName: `lambda-${envname}`,
+      entry: "../backend/src/index.ts",
+      handler: "handler",
+      runtime: lambda.Runtime.NODEJS_20_X,
+      memorySize: 256,
+      bundling: {
+        forceDockerBundling: true,
       },
-    );
+    });
 
     // API Lambda関数URL
     const apiLambdaFnUrl = apiLambda.addFunctionUrl({
@@ -52,7 +55,7 @@ export class CdkStack extends cdk.Stack {
       this,
       "cloudFrontDistribution",
       {
-        comment: "hoge-distribution",
+        comment: `distribution-${envname}`,
         defaultRootObject: "index.html",
         defaultBehavior: {
           origin:

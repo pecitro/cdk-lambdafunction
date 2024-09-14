@@ -1,23 +1,24 @@
 {
-  "workspaces": ["backend", "frontend", "cdk"],
+  "workspaces": ["backend", "frontend", "infrastructure"],
   "scripts": {
-    "cdk_diff": "npm -w frontend run build && npx -w cdk cdk diff",
-    "cdk_deploy": "npm -w frontend run build && npx -w cdk cdk deploy"
+    "cdk_diff": "npm -w frontend run build && npx -w infrastructure cdk diff",
+    "cdk_deploy": "npm -w frontend run build && npx -w infrastructure cdk deploy",
+    "cdk_watch": "npm -w frontend run build && npx -w infrastructure cdk watch"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.8.3",
+    "@biomejs/biome": "1.9.0",
     "@eslint/js": "9.10.0",
     "@types/node": "20.16.5",
     "@types/react": "18.3.5",
     "@types/react-dom": "18.3.0",
     "@vitejs/plugin-react-swc": "3.7.0",
-    "aws-cdk": "2.156.0",
+    "aws-cdk": "2.158.0",
     "esbuild": "0.23.1",
     "globals": "15.9.0",
     "npm-check-updates": "17.1.1",
-    "npm-run-all2": "6.2.2",
+    "npm-run-all2": "6.2.3",
     "ts-node": "10.9.2",
-    "typescript": "5.5.4",
-    "vite": "5.4.3"
+    "typescript": "5.6.2",
+    "vite": "5.4.5"
   }
 }
