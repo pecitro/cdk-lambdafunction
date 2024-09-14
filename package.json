@@ -1,9 +1,9 @@
 {
   "workspaces": ["backend", "frontend", "infrastructure"],
   "scripts": {
-    "cdk_diff": "npm -w frontend run build && npx -w infrastructure cdk diff",
-    "cdk_deploy": "npm -w frontend run build && npx -w infrastructure cdk deploy",
-    "cdk_watch": "npm -w frontend run build && npx -w infrastructure cdk watch"
+    "diff": "npm -w frontend run build && npx -w infrastructure cdk diff",
+    "deploy": "npm -w frontend run build && npx -w infrastructure cdk deploy",
+    "watch": "npm -w frontend run build && npx -w infrastructure cdk watch"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.0",
