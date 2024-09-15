@@ -14,7 +14,7 @@ export class CdkStack extends cdk.Stack {
 
     const envname = props.envname;
 
-    // Site S3 Bucket作成
+    // Webサイト用のS3 Bucketを作成
     const siteBucket = new s3.Bucket(this, "staticSitesBucket", {
       bucketName: `${envname}-${this.account}-${this.region}`,
       publicReadAccess: false,
@@ -23,7 +23,7 @@ export class CdkStack extends cdk.Stack {
       autoDeleteObjects: true,
     });
 
-    // Site S3 ファイルアップロード（静的アセット）
+    // Webサイト用の静的ファイルをS3にアップロード
     new cdk.aws_s3_deployment.BucketDeployment(
       this,
       `staticSitesBucketUpload-${envname}`,
@@ -33,8 +33,8 @@ export class CdkStack extends cdk.Stack {
       },
     );
 
-    // API Lambda(VPC)
-    const apiLambda = new lambda_nodejs.NodejsFunction(this, "lambda", {
+    // API用のLambda関数を作成
+    const lambdaWebserver = new lambda_nodejs.NodejsFunction(this, "lambda", {
       functionName: `lambda-${envname}`,
       entry: "../backend/src/index.ts",
       handler: "handler",
@@ -45,12 +45,12 @@ export class CdkStack extends cdk.Stack {
       },
     });
 
-    // API Lambda関数URL
-    const apiLambdaFnUrl = apiLambda.addFunctionUrl({
+    // API用のLambda関数URLを設定
+    const functionUrl = lambdaWebserver.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.AWS_IAM,
     });
 
-    // CloudFront ディストリビューション作成
+    // CloudFront ディストリビューションを作成
     const hogeDistribution = new cdk.aws_cloudfront.Distribution(
       this,
       "cloudFrontDistribution",
@@ -67,7 +67,7 @@ export class CdkStack extends cdk.Stack {
         additionalBehaviors: {
           "/api/*": {
             origin: new cdk.aws_cloudfront_origins.FunctionUrlOrigin(
-              apiLambdaFnUrl,
+              functionUrl,
             ),
             cachePolicy: cdk.aws_cloudfront.CachePolicy.CACHING_DISABLED,
           },
@@ -75,7 +75,7 @@ export class CdkStack extends cdk.Stack {
       },
     );
 
-    // Lambda関数URL OAC作成（CDKがL2 Constructに対応したら差し替える）
+    // Lambda関数URLのOACを作成（CDKがL2 Constructに対応したら差し替える）
     const cfnLambdaOac = new cdk.aws_cloudfront.CfnOriginAccessControl(
       this,
       "oacLambdaUrl",
@@ -89,7 +89,7 @@ export class CdkStack extends cdk.Stack {
       },
     );
 
-    // CloudFront OAC追加(Lambda関数URL)
+    // CloudFrontにLambda関数URLのOACを追加
     const cfnDistribution = hogeDistribution.node
       .defaultChild as cdk.aws_cloudfront.CfnDistribution;
     cfnDistribution.addPropertyOverride(
@@ -97,8 +97,8 @@ export class CdkStack extends cdk.Stack {
       cfnLambdaOac.attrId,
     );
 
-    // API Lambda リソースポリシーにCloudFrontを追加
-    apiLambda.addPermission("AllowCloudFrontServicePrincipal", {
+    // LambdaのリソースポリシーにCloudFrontを追加
+    lambdaWebserver.addPermission("AllowCloudFrontServicePrincipal", {
       principal: new cdk.aws_iam.ServicePrincipal("cloudfront.amazonaws.com"),
       action: "lambda:InvokeFunctionUrl",
       sourceArn: `arn:aws:cloudfront::${cdk.Stack.of(this).account}:distribution/${hogeDistribution.distributionId}`,
