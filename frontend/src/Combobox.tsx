@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Combobox,
   makeStyles,
@@ -24,11 +23,15 @@ export const Default = (props: Partial<ComboboxProps>) => {
   const styles = useStyles();
   return (
     <div className={styles.root}>
-      <label id={comboId}>Best pet</label>
+      <label id={comboId} htmlFor={`${comboId}-controlled`}>
+        Best pet
+      </label>
       <Combobox
+        id={`${comboId}-controlled`}
         aria-labelledby={comboId}
         placeholder="Select an animal"
         {...props}
+        name="pet"
       >
         {options.map((option) => (
           <Option key={option} disabled={option === "Ferret"}>

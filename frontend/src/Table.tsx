@@ -1,4 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 import {
   FolderRegular,
   EditRegular,
@@ -16,9 +16,9 @@ import {
   TableHeader,
   TableHeaderCell,
   TableCellLayout,
-  PresenceBadgeStatus,
   Avatar,
 } from "@fluentui/react-components";
+import type { PresenceBadgeStatus } from "@fluentui/react-components";
 
 const items = [
   {
