@@ -3,7 +3,13 @@
   "organizeImports": {
     "enabled": true
   },
+  "json": {
+    "parser": {
+      "allowComments": true
+    }
+  },
   "formatter": {
+    "enabled": true,
     "indentStyle": "space"
   },
   "linter": {
