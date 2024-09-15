@@ -4,6 +4,8 @@
     "diff": "npm -w frontend run build && npx -w infrastructure cdk diff",
     "deploy": "npm -w frontend run build && npx -w infrastructure cdk deploy",
     "watch": "npm -w frontend run build && npx -w infrastructure cdk watch",
+    "format": "npx -ws biome format",
+    "lint": "npx -ws biome lint",
     "prepare": "husky"
   },
   "devDependencies": {
