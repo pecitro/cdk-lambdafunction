@@ -1,12 +1,13 @@
 {
   "workspaces": ["backend", "frontend", "infrastructure"],
   "scripts": {
-    "diff": "npm -w frontend run build && npx -w infrastructure cdk diff",
-    "deploy": "npm -w frontend run build && npx -w infrastructure cdk deploy",
-    "watch": "npm -w frontend run build && npx -w infrastructure cdk watch",
+    "prepare": "husky",
     "format": "npx -ws biome format",
     "lint": "npx -ws biome lint",
-    "prepare": "husky"
+    "deploy": "npm -w frontend run build && npx -w infrastructure cdk deploy",
+    "dev:front": "npm -w frontend run dev",
+    "dev:cdk": "npx -w infrastructure cdk watch",
+    "dev": "run-p dev:*"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.0",
