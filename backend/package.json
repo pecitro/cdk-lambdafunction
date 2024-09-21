@@ -8,6 +8,6 @@
     "deploy": "run-s build zip update"
   },
   "dependencies": {
-    "hono": "4.6.1"
+    "hono": "4.6.2"
   }
 }

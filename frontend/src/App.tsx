@@ -3,20 +3,19 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-import { Button } from "@fluentui/react-components";
-import { Default } from "./Combobox";
-import { DefaultTable } from "./Table";
+import { Loginform } from "./Loginform";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <Button appearance="primary">Primary</Button>
-      <Default />
-      <DefaultTable />
+      {/* <Button appearance="primary">Primary</Button> */}
+      {/* <Default /> */}
+      {/* <DefaultTable /> */}
+      <Loginform />
 
-      <div>
+      {/* <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -35,7 +34,7 @@ function App() {
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
-      </p>
+      </p> */}
     </>
   );
 }
